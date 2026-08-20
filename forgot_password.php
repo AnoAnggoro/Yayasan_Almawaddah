@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'config/session.php';
 require_once 'config/database.php';
 
 $database = new Database();
@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->rowCount() > 0) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Generate token (lebih pendek - 8 karakter)
-            $token = bin2hex(random_bytes(4)); // 8 karakter hexadecimal
+            // Token panjang: 8 karakter hex dulu terlalu mudah ditebak/brute force
+            $token = bin2hex(random_bytes(32));
             $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
             
             // Simpan token ke database
@@ -39,11 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $base_path = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
                 $reset_link = $protocol . "://" . $host . $base_path . "/reset_password.php?token=" . $token;
                 
-                // TODO: Kirim email (untuk sementara tampilkan link)
-                $success = "Link reset password: <br><a href='$reset_link' target='_blank' style='color: #10b981; word-break: break-all;'>$reset_link</a>";
-                
-                // Log untuk debugging
-                error_log("Reset link created: " . $reset_link);
+                // Link TIDAK boleh ditampilkan di layar: siapa pun yang tahu email
+                // orang lain bisa langsung memakainya untuk mengambil alih akun.
+                // Sampai pengiriman email (SMTP) dipasang, link hanya masuk log server
+                // dan reset dilakukan lewat administrator.
+                error_log("Reset link created for user {$user['username']}: " . $reset_link);
+                $success = 'Jika email terdaftar, permintaan reset sudah dicatat. '
+                         . 'Pengiriman email belum aktif, silakan hubungi administrator untuk melanjutkan.';
             } else {
                 $error = 'Terjadi kesalahan. Silakan coba lagi!';
             }
@@ -90,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <?php if (!$success): ?>
                 <form method="POST" action="">
+                <?= csrf_field() ?>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required>

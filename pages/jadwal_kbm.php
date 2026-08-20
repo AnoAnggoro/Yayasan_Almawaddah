@@ -366,6 +366,7 @@ if (isset($_GET['edit'])) {
             </div>
             
             <form method="POST" id="jadwalForm">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id" id="jadwal_id">
                 
                 <div class="modal-body">

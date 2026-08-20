@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'config/session.php';
 require_once 'config/database.php';
 
 $database = new Database();
@@ -13,9 +13,6 @@ $user_id = null;
 // Check token
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
-    
-    // Debug: Cek token yang diterima
-    error_log("Token received: " . $token);
     
     $stmt = $db->prepare("SELECT id, username, reset_expires FROM users WHERE reset_token = :token");
     $stmt->bindParam(':token', $token);
@@ -105,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $valid_token) {
 
                 <?php if ($valid_token && !$success): ?>
                 <form method="POST" action="">
+                <?= csrf_field() ?>
                     <div class="form-group">
                         <label for="password">Password Baru</label>
                         <div class="password-input">

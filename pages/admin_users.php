@@ -17,7 +17,8 @@ $error = '';
 // Handle reset password
 if (isset($_POST['reset_password'])) {
     $user_id = $_POST['user_id'];
-    $default_password = 'password123'; // Default password
+    // Password acak sekali pakai, bukan password statis yang sama untuk semua orang.
+    $default_password = bin2hex(random_bytes(5));
     $hashed_password = password_hash($default_password, PASSWORD_DEFAULT);
     
     $stmt = $db->prepare("UPDATE users SET password = :password WHERE id = :id");
@@ -25,7 +26,7 @@ if (isset($_POST['reset_password'])) {
     $stmt->bindParam(':id', $user_id);
     
     if ($stmt->execute()) {
-        $success = "Password berhasil direset ke: <strong>$default_password</strong>";
+        $success = "Password baru: <strong>" . e($default_password) . "</strong> &mdash; catat sekarang, hanya ditampilkan sekali. Minta pemiliknya segera menggantinya.";
     } else {
         $error = 'Gagal mereset password!';
     }
@@ -105,6 +106,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?= date('d/m/Y', strtotime($user['created_at'])) ?></td>
                                 <td>
                                     <form method="POST" style="display: inline;" onsubmit="return confirm('Reset password ke default: password123?');">
+                <?= csrf_field() ?>
                                         <input type="hidden" name="user_id" value="<?= e($user['id']) ?>">
                                         <button type="submit" name="reset_password" class="btn-action btn-warning" title="Reset Password">
                                             🔑 Reset

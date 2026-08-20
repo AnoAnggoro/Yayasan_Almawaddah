@@ -1,0 +1,8 @@
+# Folder ini hanya untuk berkas unggahan (foto, bukti pembayaran).
+# Blokir semua berkas yang bisa dieksekusi, supaya file berbahaya yang lolos
+# validasi unggah tetap tidak bisa dijalankan lewat browser.
+<FilesMatch "\.(php|phtml|php[0-9]|phar|cgi|pl|py|sh|htaccess)$">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes

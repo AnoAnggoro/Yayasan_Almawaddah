@@ -255,6 +255,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?= $edit_data ? '✏️ Edit Pengumuman' : '📝 Form Pengumuman Baru' ?>
             </h3>
             <form method="POST">
+                <?= csrf_field() ?>
                 <input type="hidden" name="action" value="<?= $edit_data ? 'edit' : 'add' ?>">
                 <?php if ($edit_data): ?>
                 <input type="hidden" name="id" value="<?= e($edit_data['id']) ?>">
@@ -370,6 +371,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ✏️
                                 </a>
                                 <form method="POST" style="display: inline;">
+                <?= csrf_field() ?>
                                     <input type="hidden" name="action" value="toggle_status">
                                     <input type="hidden" name="id" value="<?= e($row['id']) ?>">
                                     <button type="submit" class="btn-aksi btn-status" title="Ubah Status">
@@ -377,6 +379,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </button>
                                 </form>
                                 <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')">
+                <?= csrf_field() ?>
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= e($row['id']) ?>">
                                     <button type="submit" class="btn-aksi btn-hapus" title="Hapus">🗑️</button>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'config/session.php';
 require_once 'config/database.php';
 
 // Redirect if already logged in
@@ -13,11 +13,15 @@ $db = $database->getConnection();
 
 $error = '';
 
+$blokir_sampai = $_SESSION['login_blokir'] ?? 0;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     
-    if (empty($username) || empty($password)) {
+    if (time() < $blokir_sampai) {
+        $error = 'Terlalu banyak percobaan gagal. Coba lagi ' . ceil(($blokir_sampai - time()) / 60) . ' menit lagi.';
+    } elseif (empty($username) || empty($password)) {
         $error = 'Username dan password harus diisi!';
     } else {
         $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
@@ -29,10 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if (password_verify($password, $user['password'])) {
                 if ($user['status'] === 'Aktif') {
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['username'] = $user['username'];
-                    $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
-                    $_SESSION['role'] = $user['role'];
+                    unset($_SESSION['login_gagal'], $_SESSION['login_blokir']);
+                    loginUser($user);
                     
                     header('Location: pages/beranda.php');
                     exit();
@@ -44,6 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } else {
             $error = 'Username atau password salah!';
+        }
+        
+        // ponytail: hitungan percobaan disimpan di session (per-browser) + jeda 0,5 detik.
+        // Cukup untuk bot iseng; kalau butuh lebih kuat, catat per-IP di tabel database.
+        if ($error === 'Username atau password salah!') {
+            usleep(500000);
+            $_SESSION['login_gagal'] = ($_SESSION['login_gagal'] ?? 0) + 1;
+            if ($_SESSION['login_gagal'] >= 5) {
+                $_SESSION['login_blokir'] = time() + 300;
+                $_SESSION['login_gagal'] = 0;
+                $error = 'Terlalu banyak percobaan gagal. Coba lagi 5 menit lagi.';
+            }
         }
     }
 }
@@ -80,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <form method="POST" action="">
+                <?= csrf_field() ?>
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" id="username" name="username" placeholder="Username" required>

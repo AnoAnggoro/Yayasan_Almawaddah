@@ -1,0 +1,3 @@
+# Berkas di folder ini berisi kredensial database.
+# Hanya boleh dibaca oleh PHP dari sisi server, tidak boleh diakses dari browser.
+Require all denied

@@ -1,6 +1,7 @@
 <?php
 require_once '../config/session.php';
 require_once '../config/database.php';
+require_once '../config/upload.php';
 requireLogin();
 
 $database = new Database();
@@ -45,22 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['batch_payment'])) {
     
     // Handle bukti upload untuk batch
     $bukti_pembayaran = '';
-    if (isset($_FILES['bukti_pembayaran_batch']) && $_FILES['bukti_pembayaran_batch']['error'] == 0) {
-        $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
-        $filename = $_FILES['bukti_pembayaran_batch']['name'];
-        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        
-        if (in_array($ext, $allowed)) {
-            $new_filename = 'bukti_batch_' . time() . '_' . uniqid() . '.' . $ext;
-            $upload_path = '../uploads/bukti/' . $new_filename;
-            
-            if (!is_dir('../uploads/bukti')) {
-                mkdir('../uploads/bukti', 0777, true);
-            }
-            
-            if (move_uploaded_file($_FILES['bukti_pembayaran_batch']['tmp_name'], $upload_path)) {
-                $bukti_pembayaran = $new_filename;
-            }
+    if (isset($_FILES['bukti_pembayaran_batch']) && $_FILES['bukti_pembayaran_batch']['error'] === UPLOAD_ERR_OK) {
+        $nama_berkas = simpan_upload($_FILES['bukti_pembayaran_batch'], '../uploads/bukti', 'bukti_batch', ['jpg', 'jpeg', 'png', 'pdf'], $upload_error);
+        if ($nama_berkas) {
+            $bukti_pembayaran = $nama_berkas;
         }
     }
     
@@ -109,31 +98,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['batch_payment'])) {
 
     // Handle bukti upload
     $bukti_pembayaran = '';
-    if (isset($_FILES['bukti_pembayaran']) && $_FILES['bukti_pembayaran']['error'] == 0) {
-        $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
-        $filename = $_FILES['bukti_pembayaran']['name'];
-        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        
-        if (in_array($ext, $allowed)) {
-            $new_filename = 'bukti_' . time() . '_' . uniqid() . '.' . $ext;
-            $upload_path = '../uploads/bukti/' . $new_filename;
-            
-            if (!is_dir('../uploads/bukti')) {
-                mkdir('../uploads/bukti', 0777, true);
-            }
-            
-            if (move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $upload_path)) {
-                $bukti_pembayaran = $new_filename;
-                
-                // Delete old file if updating
-                if ($id) {
-                    $stmt_old = $db->prepare("SELECT bukti_pembayaran FROM pembayaran WHERE id = :id");
-                    $stmt_old->bindParam(':id', $id);
-                    $stmt_old->execute();
-                    $old_data = $stmt_old->fetch(PDO::FETCH_ASSOC);
-                    if ($old_data && $old_data['bukti_pembayaran'] && file_exists('../uploads/bukti/' . $old_data['bukti_pembayaran'])) {
-                        unlink('../uploads/bukti/' . $old_data['bukti_pembayaran']);
-                    }
+    if (isset($_FILES['bukti_pembayaran']) && $_FILES['bukti_pembayaran']['error'] === UPLOAD_ERR_OK) {
+        $nama_berkas = simpan_upload($_FILES['bukti_pembayaran'], '../uploads/bukti', 'bukti', ['jpg', 'jpeg', 'png', 'pdf'], $upload_error);
+
+        if ($nama_berkas) {
+            $bukti_pembayaran = $nama_berkas;
+
+            // Hapus berkas lama kalau ini update
+            if ($id) {
+                $stmt_old = $db->prepare("SELECT bukti_pembayaran FROM pembayaran WHERE id = :id");
+                $stmt_old->bindParam(':id', $id);
+                $stmt_old->execute();
+                $old_data = $stmt_old->fetch(PDO::FETCH_ASSOC);
+                if ($old_data && $old_data['bukti_pembayaran'] && file_exists('../uploads/bukti/' . $old_data['bukti_pembayaran'])) {
+                    unlink('../uploads/bukti/' . $old_data['bukti_pembayaran']);
                 }
             }
         }
@@ -499,6 +477,7 @@ if (isset($_GET['edit'])) {
             </div>
             
             <form method="POST" id="pembayaranForm" enctype="multipart/form-data">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id" id="pembayaran_id">
                 
                 <div class="modal-body">
@@ -707,6 +686,7 @@ if (isset($_GET['edit'])) {
             </div>
             
             <form method="POST" id="batchForm" enctype="multipart/form-data">
+                <?= csrf_field() ?>
                 <input type="hidden" name="batch_payment" value="1">
                 <input type="hidden" name="murid_id" id="batch_murid_id">
                 

@@ -1,0 +1,13 @@
+# Kredensial database server (jangan pernah masuk repo)
+config/config.local.php
+
+# Data pribadi: foto murid/guru & bukti pembayaran
+uploads/*
+!uploads/.htaccess
+
+# File sementara / log
+*.log
+*.tmp
+*.tmp.*
+_dump_*.html
+_frame_*.html

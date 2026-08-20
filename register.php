@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'config/session.php';
 require_once 'config/database.php';
 
 // Redirect if already logged in
@@ -14,7 +14,13 @@ $db = $database->getConnection();
 $error = '';
 $success = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Pendaftaran mandiri bisa ditutup lewat config/config.local.php
+$registrasi_dibuka = app_config('registrasi_publik', true);
+if (!$registrasi_dibuka) {
+    $error = 'Pendaftaran akun baru sedang ditutup. Silakan hubungi administrator.';
+}
+
+if ($registrasi_dibuka && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $nama_lengkap = $_POST['nama_lengkap'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -102,7 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <?php endif; ?>
 
-                <form method="POST" action="">
+                <?php if ($registrasi_dibuka): ?>
+<form method="POST" action="">
+                <?= csrf_field() ?>
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" id="username" name="username" placeholder="Username" required 
@@ -153,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="icon-user"></i> Daftar Sekarang
                     </button>
                 </form>
+<?php endif; ?>
 
                 <div class="footer-text" style="margin-top: 20px;">
                     <p>Sudah punya akun? <a href="index.php" style="color: #10b981; text-decoration: none; font-weight: 600;">Login di sini</a></p>

@@ -351,6 +351,7 @@ if (isset($_GET['edit'])) {
             </div>
             
             <form method="POST" id="nilaiForm">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id" id="nilai_id">
                 
                 <div class="modal-body">

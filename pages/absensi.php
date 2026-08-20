@@ -393,6 +393,7 @@ if (isset($_GET['edit'])) {
             </div>
             
             <form method="POST" id="absensiForm">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id" id="absensi_id">
                 
                 <div class="modal-body">

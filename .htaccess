@@ -1,0 +1,17 @@
+# Jangan tampilkan daftar isi folder
+Options -Indexes
+
+# Berkas yang tidak boleh diunduh dari browser
+<FilesMatch "^(database\.sql|\.gitignore|composer\.(json|lock)|.*\.md)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "same-origin"
+    # sw.js harus selalu diambil baru, jangan dari cache browser
+    <FilesMatch "sw\.js$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>

@@ -1,6 +1,7 @@
 <?php
 require_once '../config/session.php';
 require_once '../config/database.php';
+require_once '../config/upload.php';
 requireLogin();
 
 $database = new Database();
@@ -37,32 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Handle foto upload
     $foto = '';
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
-        $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-        $filename = $_FILES['foto']['name'];
-        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        
-        if (in_array($ext, $allowed)) {
-            $new_filename = 'guru_' . time() . '_' . uniqid() . '.' . $ext;
-            $upload_path = '../uploads/guru/' . $new_filename;
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $nama_berkas = simpan_upload($_FILES['foto'], '../uploads/guru', 'guru', ['jpg', 'jpeg', 'png', 'gif'], $upload_error);
+
+        if ($nama_berkas) {
+            $foto = $nama_berkas;
             
-            // Create directory if not exists
-            if (!is_dir('../uploads/guru')) {
-                mkdir('../uploads/guru', 0777, true);
-            }
-            
-            if (move_uploaded_file($_FILES['foto']['tmp_name'], $upload_path)) {
-                $foto = $new_filename;
-                
-                // Delete old photo if updating
-                if ($id) {
-                    $stmt_old = $db->prepare("SELECT foto FROM guru WHERE id = :id");
-                    $stmt_old->bindParam(':id', $id);
-                    $stmt_old->execute();
-                    $old_data = $stmt_old->fetch(PDO::FETCH_ASSOC);
-                    if ($old_data && $old_data['foto'] && file_exists('../uploads/guru/' . $old_data['foto'])) {
-                        unlink('../uploads/guru/' . $old_data['foto']);
-                    }
+            // Delete old photo if updating
+            if ($id) {
+                $stmt_old = $db->prepare("SELECT foto FROM guru WHERE id = :id");
+                $stmt_old->bindParam(':id', $id);
+                $stmt_old->execute();
+                $old_data = $stmt_old->fetch(PDO::FETCH_ASSOC);
+                if ($old_data && $old_data['foto'] && file_exists('../uploads/guru/' . $old_data['foto'])) {
+                    unlink('../uploads/guru/' . $old_data['foto']);
                 }
             }
         }
@@ -226,6 +215,7 @@ if (isset($_GET['edit'])) {
             </div>
             
             <form method="POST" id="guruForm" enctype="multipart/form-data">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id" id="guru_id">
                 
                 <div class="modal-body">
