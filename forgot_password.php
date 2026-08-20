@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($stmt->execute()) {
                 // Buat link reset (lebih bersih tanpa path penuh)
-                $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+                $protocol = is_https() ? 'https' : 'http';
                 $host = $_SERVER['HTTP_HOST'];
                 $base_path = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
                 $reset_link = $protocol . "://" . $host . $base_path . "/reset_password.php?token=" . $token;

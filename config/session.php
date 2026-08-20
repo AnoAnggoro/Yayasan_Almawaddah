@@ -1,6 +1,13 @@
 <?php
 // Cookie session dikunci dulu, harus sebelum session_start().
-$https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+// Di belakang Cloudflare/proxy, koneksi ke PHP bisa tetap http walau pengunjung
+// mengakses lewat https. Protokol aslinya ada di header X-Forwarded-Proto.
+function is_https() {
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+}
+
+$https = is_https();
 session_set_cookie_params([
     'lifetime' => 0,
     'path' => '/',
