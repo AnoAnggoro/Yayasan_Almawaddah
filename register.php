@@ -4,7 +4,7 @@ require_once 'config/database.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
-    header('Location: pages/dashboard.php');
+    header('Location: pages/beranda.php');
     exit();
 }
 
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="login-card">
                 <div class="login-header">
                     <div class="logo-circle">
-                        <i class="icon-graduation"></i>
+                        <img src="assets/img/logo_almawaddah.png" alt="Logo Yayasan Al Mawaddah">
                     </div>
                     <h1>Registrasi Akun</h1>
                     <p>Yayasan Al Mawaddah</p>

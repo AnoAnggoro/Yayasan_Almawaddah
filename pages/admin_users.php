@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once '../config/session.php';
 require_once '../config/database.php';
 
 // Check if user is logged in and is admin
@@ -88,7 +88,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tbody>
                             <?php foreach ($users as $user): ?>
                             <tr>
-                                <td><?= $user['id'] ?></td>
+                                <td><?= e($user['id']) ?></td>
                                 <td><?= htmlspecialchars($user['username']) ?></td>
                                 <td><?= htmlspecialchars($user['nama_lengkap']) ?></td>
                                 <td><?= htmlspecialchars($user['email']) ?></td>
@@ -99,13 +99,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                                 <td>
                                     <span style="background: <?= $user['status'] === 'Aktif' ? '#10b981' : '#ef4444' ?>; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">
-                                        <?= $user['status'] ?>
+                                        <?= e($user['status']) ?>
                                     </span>
                                 </td>
                                 <td><?= date('d/m/Y', strtotime($user['created_at'])) ?></td>
                                 <td>
                                     <form method="POST" style="display: inline;" onsubmit="return confirm('Reset password ke default: password123?');">
-                                        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                        <input type="hidden" name="user_id" value="<?= e($user['id']) ?>">
                                         <button type="submit" name="reset_password" class="btn-action btn-warning" title="Reset Password">
                                             🔑 Reset
                                         </button>

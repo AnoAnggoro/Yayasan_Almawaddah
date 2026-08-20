@@ -12,7 +12,7 @@ if (isset($_COOKIE[session_name()])) {
 // Destroy session
 session_destroy();
 
-// Redirect to login page (gunakan absolute path)
-header('Location: /PROJECT/yayasan_almawaddah/index.php');
+// Redirect ke halaman login (path relatif: aman kalau folder/host berubah)
+header('Location: ../index.php');
 exit;
 ?>

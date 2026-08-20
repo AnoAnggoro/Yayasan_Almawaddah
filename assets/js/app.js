@@ -1,19 +1,12 @@
-// Disable Service Worker for now to avoid errors
-// Service Worker will be enabled later when PWA is fully configured
-/*
-if ('serviceWorker' in navigator) {
+// Daftarkan service worker. sw.js ada di root proyek, file ini di assets/js/
+// -> naik dua level dari URL script ini, jadi tidak ada path yang di-hardcode.
+if ('serviceWorker' in navigator && document.currentScript) {
+  const swUrl = new URL('../../sw.js', document.currentScript.src);
   window.addEventListener('load', () => {
-    const baseUrl = window.location.origin + '/PROJECT/yayasan_almawaddah/';
-    navigator.serviceWorker.register(baseUrl + 'sw.js')
-      .then((registration) => {
-        console.log('ServiceWorker registration successful');
-      })
-      .catch((err) => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
+    navigator.serviceWorker.register(swUrl, { updateViaCache: 'none' })
+      .catch((err) => console.log('Service worker gagal didaftarkan:', err));
   });
 }
-*/
 
 // Close modal when clicking outside
 window.addEventListener('click', function(event) {
@@ -32,9 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
       const submitBtn = this.querySelector('button[type="submit"]');
       if (submitBtn && !submitBtn.disabled) {
-        submitBtn.disabled = true;
         const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Menyimpan...';
+        // disable setelah form data terkirim, kalau tidak name/value tombol ikut hilang
+        setTimeout(() => {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Menyimpan...';
+        }, 0);
         setTimeout(() => {
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;

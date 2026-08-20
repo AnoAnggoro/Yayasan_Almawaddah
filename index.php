@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Yayasan Al Mawaddah</title>
-    <link rel="manifest" href="../manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="login-card">
                 <div class="login-header">
                     <div class="logo-circle">
-                        <i class="icon-graduation"></i>
+                        <img src="assets/img/logo_almawaddah.png" alt="Logo Yayasan Al Mawaddah">
                     </div>
                    <h1>Yayasan al Mawaddah</h1>
                 <p>Sistem Informasi Pendidikan & Sosial</p>
@@ -126,5 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             field.type = field.type === 'password' ? 'text' : 'password';
         }
     </script>
+    <!-- app.js juga mendaftarkan service worker; index.php ini start_url PWA-nya -->
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

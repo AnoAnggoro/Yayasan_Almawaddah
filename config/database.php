@@ -1,4 +1,9 @@
 <?php
+// Escape output ke HTML (cegah XSS). Dipakai saat echo data ke halaman.
+function e($value) {
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+}
+
 class Database {
     private $host = "localhost";
     private $db_name = "almawaddah_db";

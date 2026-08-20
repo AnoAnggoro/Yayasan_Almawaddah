@@ -167,22 +167,22 @@ if (isset($_GET['edit'])) {
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">✅</div>
-                <div class="stat-value"><?= $total_aktif ?></div>
+                <div class="stat-value"><?= e($total_aktif) ?></div>
                 <div class="stat-label">Murid Aktif</div>
             </div>
             <div class="stat-card danger">
                 <div class="stat-icon">🎓</div>
-                <div class="stat-value"><?= $total_lulus ?></div>
+                <div class="stat-value"><?= e($total_lulus) ?></div>
                 <div class="stat-label">Lulus</div>
             </div>
             <div class="stat-card warning">
                 <div class="stat-icon">🚚</div>
-                <div class="stat-value"><?= $total_pindah ?></div>
+                <div class="stat-value"><?= e($total_pindah) ?></div>
                 <div class="stat-label">Pindah</div>
             </div>
             <div class="stat-card info">
                 <div class="stat-icon">🚪</div>
-                <div class="stat-value"><?= $total_keluar ?></div>
+                <div class="stat-value"><?= e($total_keluar) ?></div>
                 <div class="stat-label">Keluar</div>
             </div>
         </div>
@@ -191,8 +191,8 @@ if (isset($_GET['edit'])) {
         <div class="content-card" style="margin-bottom: 20px;">
             <h3 style="margin: 0 0 10px 0;">📊 Absensi Hari Ini</h3>
             <p style="margin: 0; color: #64748b;">
-                <strong style="color: #10b981;"><?= $absen_hari_ini ?></strong> Sudah Absen | 
-                <strong style="color: #ef4444;"><?= $belum_absen ?></strong> Belum Absen
+                <strong style="color: #10b981;"><?= e($absen_hari_ini) ?></strong> Sudah Absen | 
+                <strong style="color: #ef4444;"><?= e($belum_absen) ?></strong> Belum Absen
             </p>
         </div>
 
@@ -203,7 +203,7 @@ if (isset($_GET['edit'])) {
                     ➕ Input Absensi
                 </button>
                 
-                <input type="date" id="filterTanggal" value="<?= $filter_tanggal ?>" 
+                <input type="date" id="filterTanggal" value="<?= e($filter_tanggal) ?>" 
                        onchange="autoFilter()"
                        style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
                 
@@ -231,8 +231,8 @@ if (isset($_GET['edit'])) {
                 <select id="filterAngkatan" onchange="autoFilter()" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
                     <option value="">Semua Angkatan</option>
                     <?php foreach ($tahun_ajaran_list as $tahun): ?>
-                    <option value="<?= $tahun ?>" <?= $filter_tahun_ajaran == $tahun ? 'selected' : '' ?>>
-                        📚 <?= $tahun ?>
+                    <option value="<?= e($tahun) ?>" <?= $filter_tahun_ajaran == $tahun ? 'selected' : '' ?>>
+                        📚 <?= e($tahun) ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
@@ -255,7 +255,7 @@ if (isset($_GET['edit'])) {
                 <h3 style="margin: 0;">Data Absensi 
                     <?php if ($filter_semester): ?>
                         <span class="badge badge-info" style="font-size: 12px; margin-left: 10px;">
-                            <?= $filter_semester ?>
+                            <?= e($filter_semester) ?>
                         </span>
                     <?php endif; ?>
                     <?php if ($filter_status_murid): ?>
@@ -263,12 +263,12 @@ if (isset($_GET['edit'])) {
                             $filter_status_murid == 'Aktif' ? 'success' : 
                             ($filter_status_murid == 'Lulus' ? 'primary' : 'danger')
                         ?>" style="font-size: 12px; margin-left: 10px;">
-                            <?= $filter_status_murid ?>
+                            <?= e($filter_status_murid) ?>
                         </span>
                     <?php endif; ?>
                     <?php if ($filter_tahun_ajaran): ?>
                         <span class="badge badge-purple" style="font-size: 12px; margin-left: 10px;">
-                            📚 <?= $filter_tahun_ajaran ?>
+                            📚 <?= e($filter_tahun_ajaran) ?>
                         </span>
                     <?php endif; ?>
                 </h3>
@@ -308,7 +308,7 @@ if (isset($_GET['edit'])) {
                                 <span class="badge badge-<?= 
                                     $absensi['tingkat'] == 'Kelompok A' ? 'primary' : 'purple'
                                 ?>">
-                                    <?= $absensi['tingkat'] ?>
+                                    <?= e($absensi['tingkat']) ?>
                                 </span>
                             </td>
                             <td><?= htmlspecialchars($absensi['tahun_masuk'] ?? '-') ?></td>
@@ -317,7 +317,7 @@ if (isset($_GET['edit'])) {
                                     $murid_status == 'Aktif' ? 'success' : 
                                     ($murid_status == 'Lulus' ? 'primary' : 'danger')
                                 ?>">
-                                    <?= $murid_status ?>
+                                    <?= e($murid_status) ?>
                                 </span>
                             </td>
                             <td>
@@ -326,7 +326,7 @@ if (isset($_GET['edit'])) {
                                     ($absensi['status'] == 'Sakit' ? 'warning' : 
                                     ($absensi['status'] == 'Izin' ? 'info' : 'danger')) 
                                 ?>">
-                                    <?= $absensi['status'] ?>
+                                    <?= e($absensi['status']) ?>
                                 </span>
                             </td>
                             <td><?= htmlspecialchars($absensi['keterangan']) ?: '-' ?></td>
@@ -334,7 +334,7 @@ if (isset($_GET['edit'])) {
                                 <div style="display: flex; gap: 5px;">
                                     <a href="javascript:void(0)" onclick="viewAbsensi(<?= htmlspecialchars(json_encode($absensi)) ?>)" class="btn btn-success" title="Lihat Detail">👁️</a>
                                     <a href="javascript:void(0)" onclick="editAbsensi(<?= htmlspecialchars(json_encode($absensi)) ?>)" class="btn btn-warning" title="Edit">✏️</a>
-                                    <a href="?delete=<?= $absensi['id'] ?>&tanggal=<?= $filter_tanggal ?>&tingkat=<?= $filter_tingkat ?>&status_murid=<?= $filter_status_murid ?>&tahun_ajaran=<?= $filter_tahun_ajaran ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data absensi ini?')" title="Hapus">🗑️</a>
+                                    <a href="?delete=<?= e($absensi['id']) ?>&tanggal=<?= e($filter_tanggal) ?>&tingkat=<?= e($filter_tingkat) ?>&status_murid=<?= e($filter_status_murid) ?>&tahun_ajaran=<?= e($filter_tahun_ajaran) ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data absensi ini?')" title="Hapus">🗑️</a>
                                 </div>
                             </td>
                         </tr>
@@ -345,7 +345,7 @@ if (isset($_GET['edit'])) {
             
             <?php if ($filter_status_murid == 'Tidak Aktif' || in_array($filter_status_murid, ['Lulus', 'Pindah', 'Keluar'])): ?>
             <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-                <strong>ℹ️ Info:</strong> Menampilkan data absensi murid dengan status: <strong><?= $filter_status_murid ?></strong>
+                <strong>ℹ️ Info:</strong> Menampilkan data absensi murid dengan status: <strong><?= e($filter_status_murid) ?></strong>
             </div>
             <?php elseif (count($absensi_list) > 0 && $filter_status_murid == ''): ?>
                 <?php 
@@ -358,7 +358,7 @@ if (isset($_GET['edit'])) {
                 if ($count_non_aktif > 0): 
                 ?>
                 <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-                    <strong>⚠️ Perhatian:</strong> Terdapat <strong><?= $count_non_aktif ?></strong> data dengan latar merah (murid tidak aktif: Lulus/Pindah/Keluar)
+                    <strong>⚠️ Perhatian:</strong> Terdapat <strong><?= e($count_non_aktif) ?></strong> data dengan latar merah (murid tidak aktif: Lulus/Pindah/Keluar)
                 </div>
                 <?php endif; ?>
             <?php endif; ?>
@@ -367,15 +367,15 @@ if (isset($_GET['edit'])) {
                 <div style="font-size: 48px; margin-bottom: 15px;">📭</div>
                 <p>Tidak ada data absensi 
                     <?php if ($filter_status_murid): ?>
-                        untuk murid <strong><?= $filter_status_murid ?></strong>
+                        untuk murid <strong><?= e($filter_status_murid) ?></strong>
                     <?php endif; ?>
                     <?php if ($filter_tahun_ajaran): ?>
-                        angkatan <strong><?= $filter_tahun_ajaran ?></strong>
+                        angkatan <strong><?= e($filter_tahun_ajaran) ?></strong>
                     <?php endif; ?>
                     pada tanggal <strong><?= date('d/m/Y', strtotime($filter_tanggal)) ?></strong>
                 </p>
                 <?php if ($filter_status_murid || $filter_tingkat || $filter_tahun_ajaran): ?>
-                <a href="absensi.php?tanggal=<?= $filter_tanggal ?>" class="btn btn-primary" style="margin-top: 15px; text-decoration: none;">
+                <a href="absensi.php?tanggal=<?= e($filter_tanggal) ?>" class="btn btn-primary" style="margin-top: 15px; text-decoration: none;">
                     🔄 Reset Filter
                 </a>
                 <?php endif; ?>
@@ -406,10 +406,10 @@ if (isset($_GET['edit'])) {
                         <select name="murid_id" id="murid_id" required onchange="checkMuridStatus()">
                             <option value="">Pilih Siswa</option>
                             <?php foreach ($murid_options as $murid): ?>
-                            <option value="<?= $murid['id'] ?>" 
-                                    data-tingkat="<?= $murid['tingkat'] ?>"
-                                    data-status="<?= $murid['status_murid'] ?? 'Aktif' ?>">
-                                <?= htmlspecialchars($murid['nama']) ?> - <?= $murid['tingkat'] ?>
+                            <option value="<?= e($murid['id']) ?>" 
+                                    data-tingkat="<?= e($murid['tingkat']) ?>"
+                                    data-status="<?= e($murid['status_murid'] ?? 'Aktif') ?>">
+                                <?= htmlspecialchars($murid['nama']) ?> - <?= e($murid['tingkat']) ?>
                             </option>
                             <?php endforeach; ?>
                         </select>
@@ -552,6 +552,7 @@ if (isset($_GET['edit'])) {
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
             const table = document.querySelector('.data-table tbody');
+            if (!table) return; // tabel kosong
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

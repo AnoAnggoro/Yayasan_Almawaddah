@@ -189,18 +189,18 @@ if (isset($_GET['edit'])) {
                         <td><?= $index + 1 ?></td>
                         <td><?= htmlspecialchars($guru['nik']) ?></td>
                         <td><?= htmlspecialchars($guru['nama']) ?></td>
-                        <td><?= $guru['jenis_kelamin'] ?></td>
+                        <td><?= e($guru['jenis_kelamin']) ?></td>
                         <td><?= htmlspecialchars($guru['telepon'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($guru['pendidikan_terakhir'] ?? '-') ?></td>
-                        <td><span class="badge <?= $guru['kategori'] == 'PNS' ? 'badge-success' : 'badge-info' ?>"><?= $guru['kategori'] ?></span></td>
+                        <td><span class="badge <?= $guru['kategori'] == 'PNS' ? 'badge-success' : 'badge-info' ?>"><?= e($guru['kategori']) ?></span></td>
                         <td><?= htmlspecialchars($guru['jabatan']) ?></td>
                         <td><?= htmlspecialchars($guru['guru_kelas'] ?? '-') ?></td>
-                        <td><span class="badge <?= $guru['status'] == 'Aktif' ? 'badge-success' : 'badge-danger' ?>"><?= $guru['status'] ?></span></td>
+                        <td><span class="badge <?= $guru['status'] == 'Aktif' ? 'badge-success' : 'badge-danger' ?>"><?= e($guru['status']) ?></span></td>
                         <td>
                             <div style="display: flex; gap: 5px;">
                                 <a href="javascript:void(0)" onclick="viewGuru(<?= htmlspecialchars(json_encode($guru)) ?>)" class="btn btn-success" title="Lihat Detail">👁️</a>
                                 <a href="javascript:void(0)" onclick="editGuru(<?= htmlspecialchars(json_encode($guru)) ?>)" class="btn btn-warning">✏️</a>
-                                <a href="?delete=<?= $guru['id'] ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data ini?')">🗑️</a>
+                                <a href="?delete=<?= e($guru['id']) ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data ini?')">🗑️</a>
                             </div>
                         </td>
                     </tr>
@@ -233,7 +233,7 @@ if (isset($_GET['edit'])) {
                     <div class="form-group">
                         <label>Foto Profil</label>
                         <div style="text-align: center; margin-bottom: 15px;">
-                            <img id="preview_foto" src="../assets/img/default-avatar.png" 
+                            <img id="preview_foto" src="../assets/img/default-avatar.svg" 
                                  style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #e2e8f0;">
                         </div>
                         <input type="file" name="foto" id="foto" accept="image/*" onchange="previewImage(this)">
@@ -379,7 +379,7 @@ if (isset($_GET['edit'])) {
             
             <div class="modal-body">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <img id="view_foto" src="../assets/img/default-avatar.png" 
+                    <img id="view_foto" src="../assets/img/default-avatar.svg" 
                          style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #10b981;">
                 </div>
                 
@@ -475,7 +475,7 @@ if (isset($_GET['edit'])) {
             document.getElementById('modalTitle').textContent = 'Tambah Guru';
             document.getElementById('guruForm').reset();
             document.getElementById('guru_id').value = '';
-            document.getElementById('preview_foto').src = '../assets/img/default-avatar.png';
+            document.getElementById('preview_foto').src = '../assets/img/default-avatar.svg';
         }
 
         function closeModal() {
@@ -505,7 +505,7 @@ if (isset($_GET['edit'])) {
             if (data.foto) {
                 document.getElementById('preview_foto').src = '../uploads/guru/' + data.foto;
             } else {
-                document.getElementById('preview_foto').src = '../assets/img/default-avatar.png';
+                document.getElementById('preview_foto').src = '../assets/img/default-avatar.svg';
             }
         }
 
@@ -515,7 +515,7 @@ if (isset($_GET['edit'])) {
             if (data.foto) {
                 document.getElementById('view_foto').src = '../uploads/guru/' + data.foto;
             } else {
-                document.getElementById('view_foto').src = '../assets/img/default-avatar.png';
+                document.getElementById('view_foto').src = '../assets/img/default-avatar.svg';
             }
             
             document.getElementById('view_nik').textContent = data.nik;
@@ -557,6 +557,7 @@ if (isset($_GET['edit'])) {
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
             const table = document.querySelector('.data-table tbody');
+            if (!table) return; // tabel kosong
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

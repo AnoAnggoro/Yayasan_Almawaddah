@@ -166,22 +166,22 @@ if (isset($_GET['edit'])) {
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">✅</div>
-                <div class="stat-value"><?= $total_aktif ?></div>
+                <div class="stat-value"><?= e($total_aktif) ?></div>
                 <div class="stat-label">Murid Aktif</div>
             </div>
             <div class="stat-card danger">
                 <div class="stat-icon">🎓</div>
-                <div class="stat-value"><?= $total_lulus ?></div>
+                <div class="stat-value"><?= e($total_lulus) ?></div>
                 <div class="stat-label">Lulus</div>
             </div>
             <div class="stat-card warning">
                 <div class="stat-icon">🚚</div>
-                <div class="stat-value"><?= $total_pindah ?></div>
+                <div class="stat-value"><?= e($total_pindah) ?></div>
                 <div class="stat-label">Pindah</div>
             </div>
             <div class="stat-card info">
                 <div class="stat-icon">🚪</div>
-                <div class="stat-value"><?= $total_keluar ?></div>
+                <div class="stat-value"><?= e($total_keluar) ?></div>
                 <div class="stat-label">Keluar</div>
             </div>
         </div>
@@ -202,7 +202,7 @@ if (isset($_GET['edit'])) {
                 <select id="filterAspek" onchange="autoFilter()" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; max-width: 200px;">
                     <option value="">Semua Aspek</option>
                     <?php foreach ($aspek_options as $aspek): ?>
-                    <option value="<?= $aspek['id'] ?>" <?= $filter_aspek == $aspek['id'] ? 'selected' : '' ?>>
+                    <option value="<?= e($aspek['id']) ?>" <?= $filter_aspek == $aspek['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars(substr($aspek['nama_aspek'], 0, 30)) ?>...
                     </option>
                     <?php endforeach; ?>
@@ -225,8 +225,8 @@ if (isset($_GET['edit'])) {
                 <select id="filterAngkatan" onchange="autoFilter()" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
                     <option value="">Semua Angkatan</option>
                     <?php foreach ($tahun_ajaran_list as $tahun): ?>
-                    <option value="<?= $tahun ?>" <?= $filter_tahun_ajaran == $tahun ? 'selected' : '' ?>>
-                        <?= $tahun ?>
+                    <option value="<?= e($tahun) ?>" <?= $filter_tahun_ajaran == $tahun ? 'selected' : '' ?>>
+                        <?= e($tahun) ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
@@ -252,12 +252,12 @@ if (isset($_GET['edit'])) {
                             $filter_status_murid == 'Aktif' ? 'success' : 
                             ($filter_status_murid == 'Lulus' ? 'primary' : 'danger')
                         ?>" style="font-size: 12px; margin-left: 10px;">
-                            <?= $filter_status_murid ?>
+                            <?= e($filter_status_murid) ?>
                         </span>
                     <?php endif; ?>
                     <?php if ($filter_tahun_ajaran): ?>
                         <span class="badge badge-info" style="font-size: 12px; margin-left: 10px;">
-                            📚 <?= $filter_tahun_ajaran ?>
+                            📚 <?= e($filter_tahun_ajaran) ?>
                         </span>
                     <?php endif; ?>
                 </h3>
@@ -296,7 +296,7 @@ if (isset($_GET['edit'])) {
                                 <span class="badge badge-<?= 
                                     $nilai['tingkat'] == 'Kelompok A' ? 'primary' : 'purple'
                                 ?>">
-                                    <?= $nilai['tingkat'] ?>
+                                    <?= e($nilai['tingkat']) ?>
                                 </span>
                             </td>
                             <td><?= htmlspecialchars($nilai['tahun_masuk'] ?? '-') ?></td>
@@ -305,7 +305,7 @@ if (isset($_GET['edit'])) {
                                     $status_murid == 'Aktif' ? 'success' : 
                                     ($status_murid == 'Lulus' ? 'primary' : 'danger')
                                 ?>">
-                                    <?= $status_murid ?>
+                                    <?= e($status_murid) ?>
                                 </span>
                             </td>
                             <td><?= htmlspecialchars($nilai['nama_aspek']) ?></td>
@@ -318,7 +318,7 @@ if (isset($_GET['edit'])) {
                             <td>
                                 <div style="display: flex; gap: 5px;">
                                     <a href="javascript:void(0)" onclick="editNilai(<?= htmlspecialchars(json_encode($nilai)) ?>)" class="btn btn-warning" title="Edit">✏️</a>
-                                    <a href="?delete=<?= $nilai['id'] ?>&tingkat=<?= $filter_tingkat ?>&aspek=<?= $filter_aspek ?>&semester=<?= $filter_semester ?>&status_murid=<?= $filter_status_murid ?>&tahun_ajaran=<?= $filter_tahun_ajaran ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data nilai ini?')" title="Hapus">🗑️</a>
+                                    <a href="?delete=<?= e($nilai['id']) ?>&tingkat=<?= e($filter_tingkat) ?>&aspek=<?= e($filter_aspek) ?>&semester=<?= e($filter_semester) ?>&status_murid=<?= e($filter_status_murid) ?>&tahun_ajaran=<?= e($filter_tahun_ajaran) ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data nilai ini?')" title="Hapus">🗑️</a>
                                 </div>
                             </td>
                         </tr>
@@ -329,7 +329,7 @@ if (isset($_GET['edit'])) {
             
             <?php if ($filter_status_murid == 'Tidak Aktif' || in_array($filter_status_murid, ['Lulus', 'Pindah', 'Keluar'])): ?>
             <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-                <strong>📁 Info:</strong> Menampilkan data nilai murid dengan status: <strong><?= $filter_status_murid ?></strong>
+                <strong>📁 Info:</strong> Menampilkan data nilai murid dengan status: <strong><?= e($filter_status_murid) ?></strong>
             </div>
             <?php endif; ?>
             
@@ -361,10 +361,10 @@ if (isset($_GET['edit'])) {
                             <?php foreach ($murid_options as $murid): 
                                 $status_label = ($murid['status_murid'] ?? 'Aktif') !== 'Aktif' ? ' (' . $murid['status_murid'] . ')' : '';
                             ?>
-                            <option value="<?= $murid['id'] ?>" 
-                                    data-tingkat="<?= $murid['tingkat'] ?>"
-                                    data-status="<?= $murid['status_murid'] ?? 'Aktif' ?>">
-                                <?= htmlspecialchars($murid['nama']) ?> - <?= $murid['tingkat'] ?><?= $status_label ?>
+                            <option value="<?= e($murid['id']) ?>" 
+                                    data-tingkat="<?= e($murid['tingkat']) ?>"
+                                    data-status="<?= e($murid['status_murid'] ?? 'Aktif') ?>">
+                                <?= htmlspecialchars($murid['nama']) ?> - <?= e($murid['tingkat']) ?><?= e($status_label) ?>
                             </option>
                             <?php endforeach; ?>
                         </select>
@@ -380,7 +380,7 @@ if (isset($_GET['edit'])) {
                         <select name="aspek_id" id="aspek_id" required style="height: auto;">
                             <option value="">Pilih Aspek Penilaian</option>
                             <?php foreach ($aspek_options as $aspek): ?>
-                            <option value="<?= $aspek['id'] ?>">
+                            <option value="<?= e($aspek['id']) ?>">
                                 <?= htmlspecialchars($aspek['nama_aspek']) ?>
                             </option>
                             <?php endforeach; ?>
@@ -455,6 +455,7 @@ if (isset($_GET['edit'])) {
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
             const table = document.querySelector('.data-table tbody');
+            if (!table) return; // tabel kosong
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

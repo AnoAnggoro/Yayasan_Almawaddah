@@ -190,12 +190,11 @@ if (isset($_GET['edit'])) {
             border-radius: 15px;
             font-size: 10px;
             font-weight: bold;
-            position: absolute;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
+            display: block;
+            width: fit-content;
+            margin: 8px auto 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 10;
+            z-index: 1;
         }
         
         /* Modal Detail */
@@ -310,7 +309,7 @@ if (isset($_GET['edit'])) {
                         foreach ($times as $time):
                         ?>
                         <tr>
-                            <td class="time-cell"><?= $time ?></td>
+                            <td class="time-cell"><?= e($time) ?></td>
                             <?php foreach ($days as $day): 
                                 if ($day == 'Sabtu') continue; // Skip Saturday
                                 
@@ -342,7 +341,7 @@ if (isset($_GET['edit'])) {
                                         <?php endforeach; ?>
                                         
                                         <?php if ($count > 1): ?>
-                                            <span class="schedule-count">📚 <?= $count ?> Jadwal</span>
+                                            <span class="schedule-count">📚 <?= e($count) ?> Jadwal</span>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
@@ -411,7 +410,7 @@ if (isset($_GET['edit'])) {
                         <select name="guru_id" id="guru_id" required>
                             <option value="">Pilih Guru</option>
                             <?php foreach ($guru_options as $guru): ?>
-                            <option value="<?= $guru['id'] ?>">
+                            <option value="<?= e($guru['id']) ?>">
                                 <?= htmlspecialchars($guru['nama']) ?>
                             </option>
                             <?php endforeach; ?>
@@ -452,7 +451,7 @@ if (isset($_GET['edit'])) {
             document.getElementById('modalTitle').textContent = 'Tambah Jadwal';
             document.getElementById('jadwalForm').reset();
             document.getElementById('jadwal_id').value = '';
-            document.getElementById('tingkat').value = '<?= $filter_tingkat ?>';
+            document.getElementById('tingkat').value = <?= json_encode($filter_tingkat, JSON_HEX_TAG) ?>;
         }
 
         function closeModal() {

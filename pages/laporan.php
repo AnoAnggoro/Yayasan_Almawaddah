@@ -26,9 +26,9 @@ if ($jenis_laporan) {
             $laporan_title = '📊 Laporan Data Murid';
             $where = "WHERE 1=1";
             if ($tingkat) $where .= " AND tingkat = :tingkat";
-            if ($angkatan) $where .= " AND angkatan = :angkatan";
+            if ($angkatan) $where .= " AND tahun_masuk = :angkatan";
             if ($tanggal_dari && $tanggal_sampai) {
-                $where .= " AND tanggal_masuk BETWEEN :tanggal_dari AND :tanggal_sampai";
+                $where .= " AND created_at BETWEEN :tanggal_dari AND :tanggal_sampai";
             }
             if ($status) {
                 if ($status == 'Aktif') {
@@ -58,8 +58,7 @@ if ($jenis_laporan) {
                 $where .= " AND a.tanggal BETWEEN :tanggal_dari AND :tanggal_sampai";
             }
             if ($tingkat) $where .= " AND a.tingkat = :tingkat";
-            if ($semester) $where .= " AND a.semester = :semester";
-            if ($angkatan) $where .= " AND m.angkatan = :angkatan";
+            if ($angkatan) $where .= " AND m.tahun_masuk = :angkatan";
             if ($status) {
                 if ($status == 'Aktif') {
                     $where .= " AND (m.status_murid = 'Aktif' OR m.status_murid IS NULL)";
@@ -77,7 +76,6 @@ if ($jenis_laporan) {
                 $stmt->bindParam(':tanggal_sampai', $tanggal_sampai);
             }
             if ($tingkat) $stmt->bindParam(':tingkat', $tingkat);
-            if ($semester) $stmt->bindParam(':semester', $semester);
             if ($angkatan) $stmt->bindParam(':angkatan', $angkatan);
             if ($status && $status != 'Aktif') $stmt->bindParam(':status', $status);
             $stmt->execute();
@@ -88,7 +86,7 @@ if ($jenis_laporan) {
             $laporan_title = '⭐ Laporan Nilai';
             $where = "WHERE 1=1";
             if ($tingkat) $where .= " AND n.tingkat = :tingkat";
-            if ($angkatan) $where .= " AND m.angkatan = :angkatan";
+            if ($angkatan) $where .= " AND m.tahun_masuk = :angkatan";
             if ($semester) $where .= " AND n.semester = :semester";
             if ($tanggal_dari && $tanggal_sampai) {
                 $where .= " AND n.created_at BETWEEN :tanggal_dari AND :tanggal_sampai";
@@ -126,8 +124,7 @@ if ($jenis_laporan) {
                 $where .= " AND p.tanggal_bayar BETWEEN :tanggal_dari AND :tanggal_sampai";
             }
             if ($tingkat) $where .= " AND p.tingkat = :tingkat";
-            if ($angkatan) $where .= " AND m.angkatan = :angkatan";
-            if ($semester) $where .= " AND p.semester = :semester";
+            if ($angkatan) $where .= " AND m.tahun_masuk = :angkatan";
             if ($status) {
                 if ($status == 'Aktif') {
                     $where .= " AND (m.status_murid = 'Aktif' OR m.status_murid IS NULL)";
@@ -146,7 +143,6 @@ if ($jenis_laporan) {
             }
             if ($tingkat) $stmt->bindParam(':tingkat', $tingkat);
             if ($angkatan) $stmt->bindParam(':angkatan', $angkatan);
-            if ($semester) $stmt->bindParam(':semester', $semester);
             if ($status && $status != 'Aktif') $stmt->bindParam(':status', $status);
             $stmt->execute();
             $laporan_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -161,10 +157,9 @@ if ($jenis_laporan) {
         case 'guru':
             $laporan_title = '👨‍🏫 Laporan Data Guru';
             
+            // guru tidak punya kolom angkatan/semester, filternya diabaikan
             $where = "WHERE 1=1";
             if ($status) $where .= " AND status = :status";
-            if ($angkatan) $where .= " AND angkatan = :angkatan";
-            if ($semester) $where .= " AND semester = :semester";
             if ($tanggal_dari && $tanggal_sampai) {
                 $where .= " AND tanggal_masuk BETWEEN :tanggal_dari AND :tanggal_sampai";
             }
@@ -172,8 +167,6 @@ if ($jenis_laporan) {
             $query = "SELECT * FROM guru $where ORDER BY nama";
             $stmt = $db->prepare($query);
             if ($status) $stmt->bindParam(':status', $status);
-            if ($angkatan) $stmt->bindParam(':angkatan', $angkatan);
-            if ($semester) $stmt->bindParam(':semester', $semester);
             if ($tanggal_dari && $tanggal_sampai) {
                 $stmt->bindParam(':tanggal_dari', $tanggal_dari);
                 $stmt->bindParam(':tanggal_sampai', $tanggal_sampai);
@@ -283,12 +276,12 @@ if ($jenis_laporan) {
 
                     <div class="form-group filter-date" style="margin-bottom: 0; display: none;">
                         <label>Tanggal Dari</label>
-                        <input type="date" name="tanggal_dari" value="<?= $tanggal_dari ?>">
+                        <input type="date" name="tanggal_dari" value="<?= e($tanggal_dari) ?>">
                     </div>
 
                     <div class="form-group filter-date" style="margin-bottom: 0; display: none;">
                         <label>Tanggal Sampai</label>
-                        <input type="date" name="tanggal_sampai" value="<?= $tanggal_sampai ?>">
+                        <input type="date" name="tanggal_sampai" value="<?= e($tanggal_sampai) ?>">
                     </div>
 
                     <div class="form-group filter-tingkat" style="margin-bottom: 0; display: none;">
@@ -319,7 +312,7 @@ if ($jenis_laporan) {
                             $currentYear = date('Y');
                             for ($y = $currentYear; $y >= $currentYear - 10; $y--): 
                             ?>
-                            <option value="<?= $y ?>" <?= $angkatan == $y ? 'selected' : '' ?>><?= $y ?></option>
+                            <option value="<?= e($y) ?>" <?= $angkatan == $y ? 'selected' : '' ?>><?= e($y) ?></option>
                             <?php endfor; ?>
                         </select>
                     </div>
@@ -351,7 +344,7 @@ if ($jenis_laporan) {
         <?php if ($jenis_laporan && count($laporan_data) > 0): ?>
         <!-- Report Header -->
         <div style="text-align: center; margin-bottom: 30px;">
-            <h2 style="margin: 0; color: #10b981;"><?= $laporan_title ?></h2>
+            <h2 style="margin: 0; color: #10b981;"><?= e($laporan_title) ?></h2>
            
 
         <!-- Report Content -->
@@ -381,14 +374,14 @@ if ($jenis_laporan) {
                         <?php foreach ($laporan_data as $index => $row): ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= $row['nisn'] ?></td>
-                            <td><?= $row['nama'] ?></td>
-                            <td><?= $row['tingkat'] ?></td>
+                            <td><?= e($row['nisn']) ?></td>
+                            <td><?= e($row['nama']) ?></td>
+                            <td><?= e($row['tingkat']) ?></td>
                             <td><?= $row['jenis_kelamin'] == 'L' ? 'L' : 'P' ?></td>
-                            <td><?= $row['tempat_lahir'] ?>, <?= date('d/m/Y', strtotime($row['tanggal_lahir'])) ?></td>
-                            <td><?= $row['nama_ibu_kandung'] ?></td>
-                            <td><?= $row['alamat'] ?></td>
-                            <td><?= $row['status_murid'] ?? 'Aktif' ?></td>
+                            <td><?= e($row['tempat_lahir']) ?>, <?= date('d/m/Y', strtotime($row['tanggal_lahir'])) ?></td>
+                            <td><?= e($row['nama_ibu_kandung']) ?></td>
+                            <td><?= e($row['alamat']) ?></td>
+                            <td><?= e($row['status_murid'] ?? 'Aktif') ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -417,10 +410,10 @@ if ($jenis_laporan) {
                         <tr>
                             <td><?= $index + 1 ?></td>
                             <td><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
-                            <td><?= $row['nisn'] ?></td>
-                            <td><?= $row['nama'] ?></td>
-                            <td><?= $row['tingkat'] ?></td>
-                            <td><?= $row['status'] ?></td>
+                            <td><?= e($row['nisn']) ?></td>
+                            <td><?= e($row['nama']) ?></td>
+                            <td><?= e($row['tingkat']) ?></td>
+                            <td><?= e($row['status']) ?></td>
                             <td><?= $row['keterangan'] ?: '-' ?></td>
                         </tr>
                         <?php endforeach; ?>
@@ -449,12 +442,12 @@ if ($jenis_laporan) {
                         <?php foreach ($laporan_data as $index => $row): ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= $row['nisn'] ?></td>
-                            <td><?= $row['nama'] ?></td>
-                            <td><?= $row['tingkat'] ?></td>
-                            <td><?= $row['nama_aspek'] ?></td>
-                            <td><?= $row['penilaian'] ?></td>
-                            <td><?= $row['semester'] ?></td>
+                            <td><?= e($row['nisn']) ?></td>
+                            <td><?= e($row['nama']) ?></td>
+                            <td><?= e($row['tingkat']) ?></td>
+                            <td><?= e($row['nama_aspek']) ?></td>
+                            <td><?= e($row['penilaian']) ?></td>
+                            <td><?= e($row['semester']) ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -484,12 +477,12 @@ if ($jenis_laporan) {
                         <tr>
                             <td><?= $index + 1 ?></td>
                             <td><?= date('d/m/Y', strtotime($row['tanggal_bayar'])) ?></td>
-                            <td><?= $row['nisn'] ?></td>
-                            <td><?= $row['nama'] ?></td>
-                            <td><?= $row['jenis_pembayaran'] ?></td>
+                            <td><?= e($row['nisn']) ?></td>
+                            <td><?= e($row['nama']) ?></td>
+                            <td><?= e($row['jenis_pembayaran']) ?></td>
                             <td><?= $row['bulan'] ?: '-' ?></td>
                             <td>Rp <?= number_format($row['jumlah'], 0, ',', '.') ?></td>
-                            <td><?= $row['metode_pembayaran'] ?></td>
+                            <td><?= e($row['metode_pembayaran']) ?></td>
                         </tr>
                         <?php endforeach; ?>
                         <tr style="background: #e0f2fe; font-weight: bold;">
@@ -522,13 +515,13 @@ if ($jenis_laporan) {
                         <?php foreach ($laporan_data as $index => $row): ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= $row['nik'] ?></td>
-                            <td><?= $row['nama'] ?></td>
-                            <td><?= $row['jenis_kelamin'] ?></td>
-                            <td><?= $row['kategori'] ?></td>
-                            <td><?= $row['jabatan'] ?></td>
+                            <td><?= e($row['nik']) ?></td>
+                            <td><?= e($row['nama']) ?></td>
+                            <td><?= e($row['jenis_kelamin']) ?></td>
+                            <td><?= e($row['kategori']) ?></td>
+                            <td><?= e($row['jabatan']) ?></td>
                             <td><?= $row['guru_kelas'] ?: '-' ?></td>
-                            <td><?= $row['status'] ?></td>
+                            <td><?= e($row['status']) ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -687,7 +680,7 @@ if ($jenis_laporan) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'laporan_<?= $jenis_laporan ?>_<?= date('Y-m-d') ?>.xls';
+            a.download = 'laporan_' + <?= json_encode(preg_replace('/[^a-z]/i', '', $jenis_laporan), JSON_HEX_TAG) ?> + '_<?= date('Y-m-d') ?>.xls';
             a.click();
         }
         

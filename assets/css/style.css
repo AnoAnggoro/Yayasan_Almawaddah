@@ -55,15 +55,21 @@ body {
 }
 
 .logo-circle {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 50%;
+    width: 110px;
+    height: 110px;
+    border-radius: 14px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 20px;
-    box-shadow: 0 10px 30px rgba(74, 124, 89, 0.3);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+}
+
+.logo-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .icon-graduation::before {
@@ -853,56 +859,207 @@ body {
     }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 18px 15px;
+    }
+
+    .navigation {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .navigation::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .navigation::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 3px;
+    }
+
+    .nav-menu li a {
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+
     .header {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-    }
-
-    .header-left {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
-
-    .header-title h1 {
-        font-size: 18px;
-    }
-
-    .header-title p {
-        font-size: 11px;
-    }
-
-    .header-right {
-        text-align: center;
-        width: 100%;
-    }
-
-    .user-info > div {
-        justify-content: center !important;
-    }
-
-    .btn-logout {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .nav-menu {
-        flex-wrap: nowrap;
+        padding: 12px 16px;
     }
 
     .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 15px;
     }
-    
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-value {
+        font-size: 26px;
+    }
+
+    .content-card {
+        padding: 18px;
+    }
+
+    .content-card > div[style*="flex"],
+    .content-card > div[style*="flex"] > div[style*="flex"] {
+        flex-wrap: wrap !important;
+    }
+
+    .content-card input[type="text"],
+    .content-card input[type="date"],
+    .content-card select,
+    .modal-body input,
+    .modal-body select,
+    .modal-body textarea {
+        font-size: 16px; /* cegah auto-zoom iOS */
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 767px) {
+    .header {
+        flex-direction: row;
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .header-left {
+        flex-direction: row;
+        text-align: left;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .header-logo img {
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    .header-title h1 {
+        font-size: 15px !important;
+    }
+
+    .header-title p {
+        display: none;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .user-info,
+    .user-info > div {
+        margin-bottom: 0 !important;
+    }
+
+    /* sembunyikan nama + role, sisakan avatar */
+    .user-info > div > div:last-child {
+        display: none;
+    }
+
+    .btn-logout {
+        width: auto;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .main-content {
+        padding: 15px 12px;
+    }
+
+    .page-header {
+        margin-bottom: 18px;
+        padding-bottom: 12px;
+    }
+
+    .page-header h2 {
+        font-size: 18px;
+    }
+
+    .nav-menu li a {
+        padding: 12px 12px;
+        font-size: 13px;
+    }
+
+    /* 2 kolom biar tidak jadi tumpukan panjang */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .stat-icon {
+        font-size: 26px;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        font-size: 22px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    .content-card {
+        padding: 15px;
+    }
+
     .filters {
         grid-template-columns: 1fr;
     }
 
+    /* baris toolbar/filter berbasis inline flex -> dibungkus jadi 1 kolom */
+    .content-card > div[style*="flex"],
+    .content-card > div[style*="flex"] > div[style*="flex"] {
+        flex-wrap: wrap !important;
+        max-width: 100% !important;
+    }
+
+    .content-card > div[style*="flex"] > div[style*="flex"] {
+        width: 100%;
+    }
+
+    .content-card input[type="text"],
+    .content-card input[type="search"],
+    .content-card input[type="date"],
+    .content-card input[type="number"],
+    .content-card select {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        font-size: 16px; /* cegah auto-zoom iOS */
+    }
+
+    .content-card > div > .btn,
+    .content-card > form > .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 10px 14px;
+    }
+
+    /* tabel: scroll horizontal, jangan digencet */
     .data-table {
         font-size: 12px;
+        min-width: 560px;
     }
 
     .data-table th,
@@ -910,29 +1067,123 @@ body {
         padding: 8px;
     }
 
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+
     .modal {
         padding: 10px;
     }
 
     .modal-content {
-        max-height: 95vh;
+        max-height: 92vh;
     }
 
     .modal-header {
-        padding: 15px 20px;
+        padding: 15px;
+    }
+
+    .modal-header h3 {
+        font-size: 16px;
     }
 
     .modal-body {
-        padding: 20px;
+        padding: 15px;
+    }
+
+    .modal-body input[type="text"],
+    .modal-body input[type="number"],
+    .modal-body input[type="date"],
+    .modal-body select,
+    .modal-body textarea {
+        font-size: 16px; /* cegah auto-zoom iOS */
     }
 
     .modal-footer {
-        padding: 15px 20px;
+        padding: 15px;
         flex-direction: column;
     }
 
     .modal-footer button {
         width: 100%;
+        justify-content: center;
+    }
+
+    .login-card {
+        padding: 25px 20px;
+    }
+
+    .empty-state {
+        padding: 35px 15px;
+    }
+
+    /* form 2 kolom di modal -> 1 kolom */
+    .modal-body div[style*="repeat(2"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Rapot view */
+    .rapot-container {
+        padding: 20px 15px !important;
+        margin: 10px auto !important;
+    }
+
+    .rapot-header h1 {
+        font-size: 20px !important;
+    }
+
+    .rapot-header h2 {
+        font-size: 16px !important;
+    }
+
+    .info-row {
+        grid-template-columns: 1fr !important;
+        margin-bottom: 12px !important;
+    }
+
+    .nilai-table {
+        font-size: 12px;
+    }
+
+    .nilai-table th,
+    .nilai-table td {
+        padding: 8px !important;
+    }
+
+    /* Blok tanda tangan laporan/dashboard */
+    .signature-section {
+        justify-content: center !important;
+        padding-right: 0 !important;
+        margin-bottom: 40px !important;
+    }
+
+    .signature-box {
+        min-width: 0 !important;
+        width: 100%;
+    }
+}
+
+/* Responsive - HP kecil */
+@media (max-width: 400px) {
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 12px 10px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+
+    .header-title h1 {
+        font-size: 13px !important;
+    }
+
+    .btn-logout {
+        padding: 8px 10px;
+        font-size: 12px;
     }
 }
 
@@ -1063,6 +1314,16 @@ body {
     .schedule-item {
         padding: 8px;
         min-height: 60px;
+    }
+
+    .jadwal-table {
+        min-width: 700px;
+    }
+
+    /* jangan ada scroll vertikal di dalam sel di HP */
+    .multiple-schedule {
+        max-height: none !important;
+        overflow-y: visible !important;
     }
 }
 

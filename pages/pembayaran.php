@@ -341,12 +341,12 @@ if (isset($_GET['edit'])) {
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">✅</div>
-                <div class="stat-value"><?= $stats_lunas ?></div>
+                <div class="stat-value"><?= e($stats_lunas) ?></div>
                 <div class="stat-label">Sudah Bayar SPP Bulan Ini</div>
             </div>
             <div class="stat-card danger" style="cursor: pointer;" onclick="showBelumBayar()">
                 <div class="stat-icon">❗</div>
-                <div class="stat-value"><?= $stats_belum ?></div>
+                <div class="stat-value"><?= e($stats_belum) ?></div>
                 <div class="stat-label">Belum Bayar SPP Bulan Ini</div>
             </div>
             <div class="stat-card" style="background: linear-gradient(135deg, #f9c74f, #f8961e);">
@@ -359,12 +359,12 @@ if (isset($_GET['edit'])) {
         <!-- Filter Section - AUTO FILTER with Date Range -->
         <div class="content-card">
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <input type="date" id="filterTanggalDari" value="<?= $filter_tanggal_dari ?>" 
+                <input type="date" id="filterTanggalDari" value="<?= e($filter_tanggal_dari) ?>" 
                        onchange="autoFilter()"
                        placeholder="Tanggal Dari"
                        style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
 
-                <input type="date" id="filterTanggalSampai" value="<?= $filter_tanggal_sampai ?>" 
+                <input type="date" id="filterTanggalSampai" value="<?= e($filter_tanggal_sampai) ?>" 
                        onchange="autoFilter()"
                        placeholder="Tanggal Sampai"
                        style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
@@ -401,7 +401,7 @@ if (isset($_GET['edit'])) {
                         ➕ Input Pembayaran
                     </button>
                     <button type="button" class="btn" style="background: #ef4444; color: white;" onclick="showBelumBayar()">
-                        📋 Lihat Belum Bayar (<?= $stats_belum ?>)
+                        📋 Lihat Belum Bayar (<?= e($stats_belum) ?>)
                     </button>
                 </div>
                 
@@ -444,7 +444,7 @@ if (isset($_GET['edit'])) {
                                 <span class="badge badge-<?= 
                                     $bayar['tingkat'] == 'Kelompok A' ? 'primary' : 'purple'
                                 ?>">
-                                    <?= $bayar['tingkat'] ?>
+                                    <?= e($bayar['tingkat']) ?>
                                 </span>
                             </td>
                             <td>
@@ -459,7 +459,7 @@ if (isset($_GET['edit'])) {
                             <td><?= htmlspecialchars($bayar['metode_pembayaran'] ?? '-') ?></td>
                             <td>
                                 <?php if ($bayar['bukti_pembayaran']): ?>
-                                    <a href="../uploads/bukti/<?= $bayar['bukti_pembayaran'] ?>" 
+                                    <a href="../uploads/bukti/<?= e($bayar['bukti_pembayaran']) ?>" 
                                        target="_blank" 
                                        class="btn btn-success" 
                                        style="font-size: 11px; padding: 4px 8px;"
@@ -474,7 +474,7 @@ if (isset($_GET['edit'])) {
                                 <div style="display: flex; gap: 5px;">
                                     <a href="javascript:void(0)" onclick="lihatDetail(<?= htmlspecialchars(json_encode($bayar)) ?>)" class="btn btn-success" title="Lihat Detail">👁️</a>
                                     <a href="javascript:void(0)" onclick="editPembayaran(<?= htmlspecialchars(json_encode($bayar)) ?>)" class="btn btn-warning" title="Edit">✏️</a>
-                                    <a href="?delete=<?= $bayar['id'] ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data pembayaran ini?')" title="Hapus">🗑️</a>
+                                    <a href="?delete=<?= e($bayar['id']) ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus data pembayaran ini?')" title="Hapus">🗑️</a>
                                 </div>
                             </td>
                         </tr>
@@ -510,13 +510,13 @@ if (isset($_GET['edit'])) {
                                 $info_angkatan = $murid['tahun_masuk'] ? ' (Angkatan ' . $murid['tahun_masuk'] . ')' : '';
                                 $status_murid = $murid['status_murid'] ?? 'Aktif';
                             ?>
-                            <option value="<?= $murid['id'] ?>" 
+                            <option value="<?= e($murid['id']) ?>" 
                                     data-angkatan="<?= htmlspecialchars($murid['tahun_masuk'] ?? '') ?>"
                                     data-tingkat="<?= htmlspecialchars($murid['tingkat']) ?>"
                                     data-status="<?= htmlspecialchars($status_murid) ?>">
-                                <?= htmlspecialchars($murid['nama']) ?> - <?= $murid['tingkat'] ?><?= $info_angkatan ?>
+                                <?= htmlspecialchars($murid['nama']) ?> - <?= e($murid['tingkat']) ?><?= e($info_angkatan) ?>
                                 <?php if ($status_murid !== 'Aktif'): ?>
-                                    (<?= $status_murid ?>)
+                                    (<?= e($status_murid) ?>)
                                 <?php endif; ?>
                             </option>
                             <?php endforeach; ?>
@@ -613,7 +613,7 @@ if (isset($_GET['edit'])) {
     <div id="belumBayarModal" class="modal">
         <div class="modal-content" style="max-width: 1000px;">
             <div class="modal-header">
-                <h3>📋 Daftar Belum Bayar SPP - <?= $current_month ?></h3>
+                <h3>📋 Daftar Belum Bayar SPP - <?= e($current_month) ?></h3>
                 <button type="button" class="modal-close" onclick="closeBelumBayar()">&times;</button>
             </div>
             
@@ -644,18 +644,18 @@ if (isset($_GET['edit'])) {
                                         <span class="badge badge-<?= 
                                             $murid['tingkat'] == 'Kelompok A' ? 'primary' : 'purple'
                                         ?>">
-                                            <?= $murid['tingkat'] ?>
+                                            <?= e($murid['tingkat']) ?>
                                         </span>
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                                            <button type="button" class="btn" style="background: #3b82f6; color: white; font-size: 11px; padding: 6px 10px;" onclick="viewMuridDetail(<?= $murid['id'] ?>)" title="Lihat Detail Murid">
+                                            <button type="button" class="btn" style="background: #3b82f6; color: white; font-size: 11px; padding: 6px 10px;" onclick="viewMuridDetail(<?= e($murid['id']) ?>)" title="Lihat Detail Murid">
                                                 👁️ Detail
                                             </button>
-                                            <button type="button" class="btn btn-success" style="font-size: 11px; padding: 6px 10px;" onclick="inputPembayaranDari(<?= $murid['id'] ?>, '<?= htmlspecialchars($murid['nama']) ?>')">
+                                            <button type="button" class="btn btn-success" style="font-size: 11px; padding: 6px 10px;" onclick="inputPembayaranDari(<?= e($murid['id']) ?>, '<?= htmlspecialchars($murid['nama']) ?>')">
                                                 💰 Bayar Bulan Ini
                                             </button>
-                                            <button type="button" class="btn btn-primary" style="font-size: 11px; padding: 6px 10px;" onclick="lihatRiwayat(<?= $murid['id'] ?>, '<?= htmlspecialchars($murid['nama']) ?>')">
+                                            <button type="button" class="btn btn-primary" style="font-size: 11px; padding: 6px 10px;" onclick="lihatRiwayat(<?= e($murid['id']) ?>, '<?= htmlspecialchars($murid['nama']) ?>')">
                                                 📊 Riwayat & Bayar Lunas
                                             </button>
                                         </div>
@@ -967,7 +967,7 @@ if (isset($_GET['edit'])) {
             document.getElementById('murid_id').value = muridId;
             document.getElementById('jenis_pembayaran').value = 'SPP';
             
-            const currentMonth = '<?= $current_month ?>';
+            const currentMonth = <?= json_encode($current_month, JSON_HEX_TAG) ?>;
             document.getElementById('bulan').value = currentMonth;
             
             toggleBulan();
@@ -1260,6 +1260,7 @@ if (isset($_GET['edit'])) {
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
             const table = document.querySelector('.data-table tbody');
+            if (!table) return; // tabel kosong
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

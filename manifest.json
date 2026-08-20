@@ -22,12 +22,8 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "assets/img/screenshot-1.png",
-      "sizes": "1280x720",
-      "type": "image/png"
-    }
-  ],
-  "categories": ["education", "productivity"]
+  "categories": [
+    "education",
+    "productivity"
+  ]
 }

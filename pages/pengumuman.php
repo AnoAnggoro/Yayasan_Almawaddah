@@ -257,7 +257,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form method="POST">
                 <input type="hidden" name="action" value="<?= $edit_data ? 'edit' : 'add' ?>">
                 <?php if ($edit_data): ?>
-                <input type="hidden" name="id" value="<?= $edit_data['id'] ?>">
+                <input type="hidden" name="id" value="<?= e($edit_data['id']) ?>">
                 <?php endif; ?>
                 
                 <div class="form-group">
@@ -344,10 +344,10 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><strong><?= htmlspecialchars($row['judul']) ?></strong></td>
                             <td>
                                 <span class="badge-kategori badge-<?= strtolower($row['kategori']) ?>">
-                                    <?= $row['kategori'] ?>
+                                    <?= e($row['kategori']) ?>
                                 </span>
                             </td>
-                            <td><?= $row['target'] ?></td>
+                            <td><?= e($row['target']) ?></td>
                             <td><?= substr(htmlspecialchars($row['isi']), 0, 80) ?><?= strlen($row['isi']) > 80 ? '...' : '' ?></td>
                             <td>
                                 <?php if ($row['tanggal_berlaku'] || $row['tanggal_berakhir']): ?>
@@ -362,23 +362,23 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
                             <td>
                                 <span class="badge <?= $row['status'] == 'Aktif' ? 'badge-success' : 'badge-secondary' ?>">
-                                    <?= $row['status'] ?>
+                                    <?= e($row['status']) ?>
                                 </span>
                             </td>
                             <td style="white-space: nowrap;">
-                                <a href="?edit=<?= $row['id'] ?>" class="btn-aksi btn-edit" title="Edit">
+                                <a href="?edit=<?= e($row['id']) ?>" class="btn-aksi btn-edit" title="Edit">
                                     ✏️
                                 </a>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="action" value="toggle_status">
-                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                    <input type="hidden" name="id" value="<?= e($row['id']) ?>">
                                     <button type="submit" class="btn-aksi btn-status" title="Ubah Status">
                                         <?= $row['status'] == 'Aktif' ? '🔒' : '✅' ?>
                                     </button>
                                 </form>
                                 <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')">
                                     <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                    <input type="hidden" name="id" value="<?= e($row['id']) ?>">
                                     <button type="submit" class="btn-aksi btn-hapus" title="Hapus">🗑️</button>
                                 </form>
                             </td>

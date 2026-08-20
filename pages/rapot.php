@@ -90,22 +90,22 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">✅</div>
-                <div class="stat-value"><?= $total_aktif ?></div>
+                <div class="stat-value"><?= e($total_aktif) ?></div>
                 <div class="stat-label">Murid Aktif</div>
             </div>
             <div class="stat-card danger">
                 <div class="stat-icon">🎓</div>
-                <div class="stat-value"><?= $total_lulus ?></div>
+                <div class="stat-value"><?= e($total_lulus) ?></div>
                 <div class="stat-label">Lulus</div>
             </div>
             <div class="stat-card warning">
                 <div class="stat-icon">🚚</div>
-                <div class="stat-value"><?= $total_pindah ?></div>
+                <div class="stat-value"><?= e($total_pindah) ?></div>
                 <div class="stat-label">Pindah</div>
             </div>
             <div class="stat-card info">
                 <div class="stat-icon">🚪</div>
-                <div class="stat-value"><?= $total_keluar ?></div>
+                <div class="stat-value"><?= e($total_keluar) ?></div>
                 <div class="stat-label">Keluar</div>
             </div>
         </div>
@@ -167,7 +167,7 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
                             $filter_status_murid == 'Aktif' ? 'success' : 
                             ($filter_status_murid == 'Lulus' ? 'primary' : 'danger')
                         ?>" style="font-size: 12px; margin-left: 10px;">
-                            <?= $filter_status_murid ?>
+                            <?= e($filter_status_murid) ?>
                         </span>
                     <?php endif; ?>
                 </h3>
@@ -218,7 +218,7 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
                                 <span class="badge badge-<?= 
                                     $murid['tingkat'] == 'Kelompok A' ? 'pink' : 'purple'
                                 ?>">
-                                    <?= $murid['tingkat'] ?>
+                                    <?= e($murid['tingkat']) ?>
                                 </span>
                             </td>
                             <td>
@@ -226,25 +226,25 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
                                     $status_murid == 'Aktif' ? 'success' : 
                                     ($status_murid == 'Lulus' ? 'primary' : 'danger')
                                 ?>">
-                                    <?= $status_murid ?>
+                                    <?= e($status_murid) ?>
                                 </span>
                             </td>
                             <td>
-                                <strong><?= $angkatan_info ?></strong>
+                                <strong><?= e($angkatan_info) ?></strong>
                                 <?php if ($tahun_ke): ?>
-                                    <br><small style="color: <?= $is_non_aktif ? '#92400e' : '#10b981' ?>;"><?= $tahun_ke ?></small>
+                                    <br><small style="color: <?= $is_non_aktif ? '#92400e' : '#10b981' ?>;"><?= e($tahun_ke) ?></small>
                                 <?php endif; ?>
                             </td>
-                            <td><?= $filter_semester ?></td>
+                            <td><?= e($filter_semester) ?></td>
                             <td>
                                 <div style="display: flex; gap: 5px;">
-                                    <a href="rapot_view.php?murid_id=<?= $murid['id'] ?>&semester=<?= urlencode($filter_semester) ?>&tahun=<?= urlencode($filter_tahun) ?>" 
+                                    <a href="rapot_view.php?murid_id=<?= e($murid['id']) ?>&semester=<?= urlencode($filter_semester) ?>&tahun=<?= urlencode($filter_tahun) ?>" 
                                        class="btn btn-success" 
                                        title="Lihat Rapot"
                                        target="_blank">
                                         👁️ Lihat
                                     </a>
-                                    <a href="rapot_print.php?murid_id=<?= $murid['id'] ?>&semester=<?= urlencode($filter_semester) ?>&tahun=<?= urlencode($filter_tahun) ?>" 
+                                    <a href="rapot_print.php?murid_id=<?= e($murid['id']) ?>&semester=<?= urlencode($filter_semester) ?>&tahun=<?= urlencode($filter_tahun) ?>" 
                                        class="btn btn-warning" 
                                        title="Cetak Rapot"
                                        target="_blank">
@@ -260,7 +260,7 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
 
             <?php if ($filter_status_murid == 'Tidak Aktif' || in_array($filter_status_murid, ['Lulus', 'Pindah', 'Keluar'])): ?>
             <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-                <strong>📁 Info Arsip:</strong> Menampilkan rapot siswa dengan status: <strong><?= $filter_status_murid ?></strong>. 
+                <strong>📁 Info Arsip:</strong> Menampilkan rapot siswa dengan status: <strong><?= e($filter_status_murid) ?></strong>. 
                 Data rapot tetap tersimpan sebagai arsip meskipun siswa sudah tidak aktif.
             </div>
             <?php elseif (count($murid_list) > 0 && $filter_status_murid == ''): ?>
@@ -274,7 +274,7 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
                 if ($count_non_aktif > 0): 
                 ?>
                 <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-                    <strong>⚠️ Perhatian:</strong> Terdapat <strong><?= $count_non_aktif ?></strong> data dengan latar kuning (siswa tidak aktif: Lulus/Pindah/Keluar)
+                    <strong>⚠️ Perhatian:</strong> Terdapat <strong><?= e($count_non_aktif) ?></strong> data dengan latar kuning (siswa tidak aktif: Lulus/Pindah/Keluar)
                 </div>
                 <?php endif; ?>
             <?php endif; ?>
@@ -284,11 +284,11 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
                 <div style="font-size: 48px; margin-bottom: 15px;">📭</div>
                 <p>Tidak ada data siswa
                     <?php if ($filter_status_murid): ?>
-                        dengan status <strong><?= $filter_status_murid ?></strong>
+                        dengan status <strong><?= e($filter_status_murid) ?></strong>
                     <?php endif; ?>
                 </p>
                 <?php if ($filter_status_murid || $filter_tingkat): ?>
-                <a href="rapot.php?tahun_ajaran=<?= $filter_tahun ?>&semester=<?= $filter_semester ?>" class="btn btn-primary" style="margin-top: 15px; text-decoration: none;">
+                <a href="rapot.php?tahun_ajaran=<?= e($filter_tahun) ?>&semester=<?= e($filter_semester) ?>" class="btn btn-primary" style="margin-top: 15px; text-decoration: none;">
                     🔄 Reset Filter
                 </a>
                 <?php endif; ?>
@@ -324,6 +324,7 @@ $total_keluar = $db->query("SELECT COUNT(*) FROM murid WHERE status_murid = 'Kel
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
             const table = document.querySelector('.data-table tbody');
+            if (!table) return; // tabel kosong
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

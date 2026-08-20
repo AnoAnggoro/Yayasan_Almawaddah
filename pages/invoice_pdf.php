@@ -78,7 +78,7 @@ ob_start();
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><?= $filename ?></title>
+    <title><?= e($filename) ?></title>
     <style>
         @page { margin: 20px; }
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
@@ -112,11 +112,11 @@ ob_start();
         <div class="info-section">
             <div class="info-row">
                 <strong>No. Transaksi:</strong>
-                <span>#<?= $noTransaksi ?></span>
+                <span>#<?= e($noTransaksi) ?></span>
             </div>
             <div class="info-row">
                 <strong>Tanggal Pembayaran:</strong>
-                <span><?= $tanggalBayar ?></span>
+                <span><?= e($tanggalBayar) ?></span>
             </div>
         </div>
 
@@ -175,7 +175,7 @@ ob_start();
 
         <div class="footer">
             <p>Bukti pembayaran ini sah dan dihasilkan oleh sistem</p>
-            <p>Dicetak pada: <?= $waktuCetak ?></p>
+            <p>Dicetak pada: <?= e($waktuCetak) ?></p>
             <p style="margin-top: 10px; font-style: italic;">Simpan bukti pembayaran ini sebagai arsip</p>
         </div>
     </div>

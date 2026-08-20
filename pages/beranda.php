@@ -311,19 +311,19 @@ $user = getUserData();
                 🕐 <?= date('H:i:s') ?> WIB
             </div>
             <div class="time-date">
-                <?= $today ?>, <?= date('d F Y') ?>
+                <?= e($today) ?>, <?= date('d F Y') ?>
             </div>
         </div>
 
         <!-- Schedule Notification -->
         <?php if ($notification): ?>
         <div class="notification-banner">
-            <div class="notification-icon"><?= $notification['icon'] ?></div>
+            <div class="notification-icon"><?= e($notification['icon']) ?></div>
             <div class="notification-content">
-                <div class="notification-title"><?= $notification['title'] ?></div>
-                <div class="notification-text"><?= $notification['message'] ?></div>
+                <div class="notification-title"><?= e($notification['title']) ?></div>
+                <div class="notification-text"><?= e($notification['message']) ?></div>
             </div>
-            <div class="notification-time"><?= $notification['time'] ?></div>
+            <div class="notification-time"><?= e($notification['time']) ?></div>
         </div>
         <?php endif; ?>
 
@@ -331,29 +331,29 @@ $user = getUserData();
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">👨‍🏫</div>
-                <div class="stat-value"><?= $stats['total_guru'] ?></div>
+                <div class="stat-value"><?= e($stats['total_guru']) ?></div>
                 <div class="stat-label">Total Guru</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">👨‍🎓</div>
-                <div class="stat-value"><?= $stats['total_murid'] ?></div>
+                <div class="stat-value"><?= e($stats['total_murid']) ?></div>
                 <div class="stat-label">Total Murid</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">📚</div>
-                <div class="stat-value"><?= $stats['total_aspek'] ?></div>
+                <div class="stat-value"><?= e($stats['total_aspek']) ?></div>
                 <div class="stat-label">Aspek Penilaian</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">✅</div>
-                <div class="stat-value"><?= $stats['murid_aktif'] ?></div>
+                <div class="stat-value"><?= e($stats['murid_aktif']) ?></div>
                 <div class="stat-label">Murid Aktif</div>
             </div>
         </div>
 
         <!-- Today's Schedule -->
         <div class="content-card">
-            <h3 style="margin-bottom: 15px;">🗓️ Jadwal Hari Ini (<?= $today ?>)</h3>
+            <h3 style="margin-bottom: 15px;">🗓️ Jadwal Hari Ini (<?= e($today) ?>)</h3>
             <div class="schedule-grid">
                 <?php if (count($today_schedules) > 0): ?>
                     <?php foreach ($today_schedules as $schedule): 
@@ -456,8 +456,8 @@ $user = getUserData();
         // Show browser notification if there are schedules today
         <?php if ($notification && $notification['type'] === 'upcoming'): ?>
         if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('<?= $notification['title'] ?>', {
-                body: '<?= addslashes($notification['message']) ?>',
+            new Notification(<?= json_encode($notification['title'], JSON_HEX_TAG) ?>, {
+                body: <?= json_encode($notification['message'], JSON_HEX_TAG) ?>,
                 icon: '../assets/images/logo.png',
                 badge: '../assets/images/logo.png',
                 tag: 'schedule-reminder'
@@ -465,8 +465,8 @@ $user = getUserData();
         } else if ('Notification' in window && Notification.permission !== 'denied') {
             Notification.requestPermission().then(function(permission) {
                 if (permission === 'granted') {
-                    new Notification('<?= $notification['title'] ?>', {
-                        body: '<?= addslashes($notification['message']) ?>',
+                    new Notification(<?= json_encode($notification['title'], JSON_HEX_TAG) ?>, {
+                        body: <?= json_encode($notification['message'], JSON_HEX_TAG) ?>,
                         icon: '../assets/images/logo.png',
                         tag: 'schedule-reminder'
                     });

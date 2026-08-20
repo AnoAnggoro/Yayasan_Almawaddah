@@ -27,7 +27,7 @@ $initials = getInitials($nama_lengkap);
         <div class="user-info">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
                 <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid rgba(255,255,255,0.5); color: white;">
-                    <?= $initials ?>
+                    <?= e($initials) ?>
                 </div>
                 <div style="text-align: left;">
                     <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">

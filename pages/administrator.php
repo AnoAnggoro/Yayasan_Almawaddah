@@ -5,7 +5,7 @@ requireLogin();
 
 // Only admin can access this page
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: dashboard.php');
+    header('Location: beranda.php');
     exit();
 }
 
@@ -109,17 +109,17 @@ if (isset($_GET['edit'])) {
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">👥</div>
-                <div class="stat-value"><?= $total_users ?></div>
+                <div class="stat-value"><?= e($total_users) ?></div>
                 <div class="stat-label">Total Users</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">👑</div>
-                <div class="stat-value"><?= $total_admin ?></div>
+                <div class="stat-value"><?= e($total_admin) ?></div>
                 <div class="stat-label">Administrator</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🔧</div>
-                <div class="stat-value"><?= $total_operator ?></div>
+                <div class="stat-value"><?= e($total_operator) ?></div>
                 <div class="stat-label">Operator</div>
             </div>
         </div>
@@ -199,7 +199,7 @@ if (isset($_GET['edit'])) {
                                 <div style="display: flex; gap: 5px;">
                                     <a href="javascript:void(0)" onclick="editUser(<?= htmlspecialchars(json_encode($user)) ?>)" class="btn btn-warning" title="Edit">✏️</a>
                                     <?php if ($user['id'] != $_SESSION['user_id']): ?>
-                                    <a href="?delete=<?= $user['id'] ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus user ini?')" title="Hapus">🗑️</a>
+                                    <a href="?delete=<?= e($user['id']) ?>" class="btn btn-danger" onclick="return confirm('Yakin hapus user ini?')" title="Hapus">🗑️</a>
                                     <?php else: ?>
                                     <button class="btn btn-danger" disabled title="Tidak bisa hapus diri sendiri" style="opacity: 0.5; cursor: not-allowed;">🔒</button>
                                     <?php endif; ?>
@@ -303,6 +303,7 @@ if (isset($_GET['edit'])) {
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
             const table = document.querySelector('.data-table tbody');
+            if (!table) return; // tabel kosong
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

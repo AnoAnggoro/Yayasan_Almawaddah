@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="login-card">
                 <div class="login-header">
                     <div class="logo-circle">
-                        <i class="icon-graduation"></i>
+                        <img src="assets/img/logo_almawaddah.png" alt="Logo Yayasan Al Mawaddah">
                     </div>
                     <h1>Lupa Password</h1>
                     <p>Masukkan email Anda untuk reset password</p>

@@ -75,7 +75,7 @@ function terbilang($angka) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Pembayaran - <?= $noTransaksi ?></title>
+    <title>Invoice Pembayaran - <?= e($noTransaksi) ?></title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -269,11 +269,11 @@ function terbilang($angka) {
         <div class="info-section">
             <div class="info-row">
                 <strong>No. Transaksi:</strong>
-                <span><?= $noTransaksi ?></span>
+                <span><?= e($noTransaksi) ?></span>
             </div>
             <div class="info-row">
                 <strong>Tanggal Pembayaran:</strong>
-                <span><?= $tanggalBayar ?></span>
+                <span><?= e($tanggalBayar) ?></span>
             </div>
         </div>
 
@@ -346,7 +346,7 @@ function terbilang($angka) {
 
         <div class="footer">
             <p><strong>Bukti pembayaran ini sah dan dihasilkan oleh sistem</strong></p>
-            <p>Dicetak pada: <?= $waktuCetak ?></p>
+            <p>Dicetak pada: <?= e($waktuCetak) ?></p>
             <p style="margin-top: 10px; font-style: italic;">⚠️ Simpan bukti pembayaran ini sebagai arsip</p>
         </div>
     </div>
